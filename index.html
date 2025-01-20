@@ -172,13 +172,12 @@
                firstName: firstName,
                lastName: lastName,
                email: email,
+			   phone: phone,
            });
 		   
 	   pe.updatePerson({
 		firstName: firstName,
 		lastName: lastName,
-		email: email,
-		phone: phone,
 	    }); // person attributes from the form
 
            pe.track("user_registered", {
