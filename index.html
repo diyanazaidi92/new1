@@ -1,218 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css">
-    <title>Ludiflex | Login & Registration</title>
-    <script>
-        // Load Infobip People WebSDK
-        (function (e, t, n, o) {
-            e.PeopleEventsObject = o;
-            e[o] = e[o] || {
-                init: function (t) {
-                    e[o].apiKey = t;
-                },
-                setPerson: function (t, n) {
-                    e[o].person = t;
-                    e[o].personTtl = n;
-                },
-                forgetPerson: function () {
-                    e[o].toForgetPerson = true;
-                },
-                track: function () {
-                    (e[o].q = e[o].q || []).push(arguments);
-                },
-                updatePerson: function (t) {
-                    e[o].personToUpdate = { person: t };
-                },
-                appendToList: function (t, n) {
-                    e[o].attributeToAppend = { attributeName: t, attribute: n };
-                },
-            };
-            var r = t.createElement("script");
-            var s = t.getElementsByTagName("script")[0];
-            r.async = 1;
-            r.src = n;
-            s.parentNode.insertBefore(r, s);
-        })(
-            window,
-            document,
-            "https://s3.eu-central-1.amazonaws.com/portal-cdn-production/people-events-sdk/pe.latest-2.js",
-            "pe"
-        );
-
-        // Initialize the Infobip WebSDK with your API key
-        pe.init("8dbf14630365928c5cdd672534a9f29a-0a769b9b-dc7d-453e-b98d-8feb964a1bb6");
-    </script>
-</head>
-<body>
- <div class="wrapper">
-    <nav class="nav">
-        <div class="nav-logo">
-            <p>LOGO .</p>
-        </div>
-        <div class="nav-menu" id="navMenu">
-            <ul>
-                <li><a href="#" class="link active">Home</a></li>
-                <li><a href="#" class="link">Blog</a></li>
-                <li><a href="#" class="link">Services</a></li>
-                <li><a href="#" class="link">About</a></li>
-            </ul>
-        </div>
-        <div class="nav-button">
-            <button class="btn white-btn" id="loginBtn" onclick="showLogin()">Sign In</button>
-            <button class="btn" id="registerBtn" onclick="showRegister()">Sign Up</button>
-        </div>
-        <div class="nav-menu-btn">
-            <i class="bx bx-menu" onclick="myMenuFunction()"></i>
-        </div>
-    </nav>
-
-<!----------------------------- Form box ----------------------------------->    
-    <div class="form-box">
-        <!------------------- login form -------------------------->
-        <div class="login-container" id="login">
-            <div class="top">
-                <span>Don't have an account? <a href="#" onclick="showRegister()">Sign Up</a></span>
-                <header>Login</header>
-            </div>
-            <div class="input-box">
-                <input type="text" id="login-email" class="input-field" placeholder="Username or Email">
-                <i class="bx bx-user"></i>
-            </div>
-            <div class="input-box">
-                <input type="password" id="login-password" class="input-field" placeholder="Password">
-                <i class="bx bx-lock-alt"></i>
-            </div>
-            <div class="input-box">
-                <input type="submit" class="submit" value="Sign In" onclick="handleLogin()">
-            </div>
-        </div>
-
-        <!------------------- registration form -------------------------->
-        <div class="register-container" id="register">
-            <div class="top">
-                <span>Have an account? <a href="#" onclick="showLogin()">Login</a></span>
-                <header>Sign Up</header>
-            </div>
-            <div class="two-forms">
-                <div class="input-box">
-                    <input type="text" id="register-firstname" class="input-field" placeholder="Firstname">
-                    <i class="bx bx-user"></i>
-                </div>
-                <div class="input-box">
-                    <input type="text" id="register-lastname" class="input-field" placeholder="Lastname">
-                    <i class="bx bx-user"></i>
-                </div>
-            </div>
-            <div class="input-box">
-                <input type="email" id="register-email" class="input-field" placeholder="Email">
-                <i class="bx bx-envelope"></i>
-            </div>
-            <div class="input-box">
-                <input type="text" id="register-phone" class="input-field" placeholder="Phone Number">
-                <i class="bx bx-phone"></i>
-	    </div>   
-            <div class="input-box">
-                <input type="password" id="register-password" class="input-field" placeholder="Password">
-                <i class="bx bx-lock-alt"></i>
-            </div>
-            <div class="input-box">
-                <input type="submit" class="submit" value="Register" onclick="handleRegistration()">
-            </div>
-        </div>
-    </div>
-</div>   
-
 <script>
-   // Menu toggle
-   function myMenuFunction() {
-       var i = document.getElementById("navMenu");
-       i.className = i.className === "nav-menu" ? "nav-menu responsive" : "nav-menu";
-   }
-
-   // Form toggling
-    var a = document.getElementById("loginBtn");
-    var b = document.getElementById("registerBtn");
-    var x = document.getElementById("login");
-    var y = document.getElementById("register");
-
-    function showLogin() {
-        x.style.left = "4px";
-        y.style.right = "-520px";
-        a.className += " white-btn";
-        b.className = "btn";
-        x.style.opacity = 1;
-        y.style.opacity = 0;
-    }
-
-    function showRegister() {
-        x.style.left = "-510px";
-        y.style.right = "5px";
-        a.className = "btn";
-        b.className += " white-btn";
-        x.style.opacity = 0;
-        y.style.opacity = 1;
-    }
-
    // Handle Registration
    function handleRegistration() {
-       const firstName = document.getElementById("register-firstname").value;
-       const lastName = document.getElementById("register-lastname").value;
-       const email = document.getElementById("register-email").value;
-       const phone = document.getElementById("register-phone").value;
-       const password = document.getElementById("register-password").value;
+       const firstName = document.getElementById("register-firstname").value.trim();
+       const lastName = document.getElementById("register-lastname").value.trim();
+       const email = document.getElementById("register-email").value.trim();
+       const phone = document.getElementById("register-phone").value.trim();
+       const password = document.getElementById("register-password").value.trim();
 
-       if (firstName && lastName && email && phone && password) {
-           // Track registration event with Infobip
-           pe.setPerson({
+       // Validate input fields
+       if (!firstName || !lastName || !email || !phone || !password) {
+           alert("Please fill out all fields.");
+           return;
+       }
+
+       // Basic email validation
+       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+       if (!emailRegex.test(email)) {
+           alert("Please enter a valid email address.");
+           return;
+       }
+
+       // Update user in Infobip People WebSDK
+       pe.setPerson({
+           firstName: firstName,
+           lastName: lastName,
+           email: email,
+           phone: phone
+       });
+
+       // Track user registration event
+       pe.track("user_registered", {
+           firstName: firstName,
+           lastName: lastName,
+           email: email,
+           phone: phone,
+           registrationDate: new Date().toISOString()
+       });
+
+       // Optionally confirm user attributes in the system
+       pe.updatePerson({
+           attributes: {
                firstName: firstName,
                lastName: lastName,
-               email: email,
-			   phone: phone,
-           });
-		   
-	   pe.updatePerson({
-		firstName: firstName,
-		lastName: lastName,
-	    }); // person attributes from the form
+               phone: phone
+           }
+       });
 
-           pe.track("user_registered", {
-               email: email,
-               registrationDate: new Date().toISOString(),
-           });
-
-           alert("Registration successful!");
-           showLogin();
-       } else {
-           alert("Please fill out all fields.");
-       }
+       alert("Registration successful!");
+       showLogin(); // Redirect to login form
    }
 
    // Handle Login
    function handleLogin() {
-       const email = document.getElementById("login-email").value;
-       const password = document.getElementById("login-password").value;
+       const email = document.getElementById("login-email").value.trim();
+       const password = document.getElementById("login-password").value.trim();
 
-       if (email && password) {
-           // Track login event with Infobip
-           pe.track("user_logged_in", {
-               email: email,
-               loginDate: new Date().toISOString(),
-           });
-
-           alert("Login successful!");
-       } else {
+       // Validate input fields
+       if (!email || !password) {
            alert("Please enter your email and password.");
+           return;
        }
+
+       // Track user login event
+       pe.track("user_logged_in", {
+           email: email,
+           loginDate: new Date().toISOString()
+       });
+
+       alert("Login successful!");
    }
 
    // Default to showing the login form
    showLogin();
 </script>
-
-</body>
-</html>
