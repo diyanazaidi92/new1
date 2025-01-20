@@ -126,78 +126,93 @@
         </div>
     </div>
 </div>   
+
 <script>
+   // Menu toggle
+   function myMenuFunction() {
+       var i = document.getElementById("navMenu");
+       i.className = i.className === "nav-menu" ? "nav-menu responsive" : "nav-menu";
+   }
+
+   // Form toggling
+    var a = document.getElementById("loginBtn");
+    var b = document.getElementById("registerBtn");
+    var x = document.getElementById("login");
+    var y = document.getElementById("register");
+
+    function showLogin() {
+        x.style.left = "4px";
+        y.style.right = "-520px";
+        a.className += " white-btn";
+        b.className = "btn";
+        x.style.opacity = 1;
+        y.style.opacity = 0;
+    }
+
+    function showRegister() {
+        x.style.left = "-510px";
+        y.style.right = "5px";
+        a.className = "btn";
+        b.className += " white-btn";
+        x.style.opacity = 0;
+        y.style.opacity = 1;
+    }
+
    // Handle Registration
    function handleRegistration() {
-       const firstName = document.getElementById("register-firstname").value.trim();
-       const lastName = document.getElementById("register-lastname").value.trim();
-       const email = document.getElementById("register-email").value.trim();
-       const phone = document.getElementById("register-phone").value.trim();
-       const password = document.getElementById("register-password").value.trim();
+       const firstName = document.getElementById("register-firstname").value;
+       const lastName = document.getElementById("register-lastname").value;
+       const email = document.getElementById("register-email").value;
+       const phone = document.getElementById("register-phone").value;
+       const password = document.getElementById("register-password").value;
 
-       // Validate input fields
-       if (!firstName || !lastName || !email || !phone || !password) {
-           alert("Please fill out all fields.");
-           return;
-       }
-
-       // Basic email validation
-       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-       if (!emailRegex.test(email)) {
-           alert("Please enter a valid email address.");
-           return;
-       }
-
-       // Update user in Infobip People WebSDK
-       pe.setPerson({
-           firstName: firstName,
-           lastName: lastName,
-           email: email,
-           phone: phone
-       });
-
-       // Track user registration event
-       pe.track("user_registered", {
-           firstName: firstName,
-           lastName: lastName,
-           email: email,
-           phone: phone,
-           registrationDate: new Date().toISOString()
-       });
-
-       // Optionally confirm user attributes in the system
-       pe.updatePerson({
-           attributes: {
+       if (firstName && lastName && email && phone && password) {
+           // Track registration event with Infobip
+           pe.setPerson({
                firstName: firstName,
                lastName: lastName,
-               phone: phone
-           }
-       });
+               email: email,
+			   phone: phone,
+           });
+		   
+	   pe.updatePerson({
+		firstName: firstName,
+		lastName: lastName,
+	    }); // person attributes from the form
 
-       alert("Registration successful!");
-       showLogin(); // Redirect to login form
+           pe.track("user_registered", {
+               email: email,
+               registrationDate: new Date().toISOString(),
+           });
+
+           alert("Registration successful!");
+           showLogin();
+       } else {
+           alert("Please fill out all fields.");
+       }
    }
 
    // Handle Login
    function handleLogin() {
-       const email = document.getElementById("login-email").value.trim();
-       const password = document.getElementById("login-password").value.trim();
+       const email = document.getElementById("login-email").value;
+       const password = document.getElementById("login-password").value;
 
-       // Validate input fields
-       if (!email || !password) {
+       if (email && password) {
+           // Track login event with Infobip
+           pe.track("user_logged_in", {
+               email: email,
+               loginDate: new Date().toISOString(),
+           });
+
+           alert("Login successful!");
+       } else {
            alert("Please enter your email and password.");
-           return;
        }
-
-       // Track user login event
-       pe.track("user_logged_in", {
-           email: email,
-           loginDate: new Date().toISOString()
-       });
-
-       alert("Login successful!");
    }
 
    // Default to showing the login form
    showLogin();
 </script>
+
+</body>
+</html>
