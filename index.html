@@ -115,7 +115,7 @@
             <div class="input-box">
                 <input type="text" id="register-phone" class="input-field" placeholder="Phone Number">
                 <i class="bx bx-phone"></i>
-	    </div>   
+            </div>   
             <div class="input-box">
                 <input type="password" id="register-password" class="input-field" placeholder="Password">
                 <i class="bx bx-lock-alt"></i>
@@ -130,33 +130,33 @@
 <script>
    // Menu toggle
    function myMenuFunction() {
-       const navMenu = document.getElementById("navMenu");
-       navMenu.className = navMenu.className === "nav-menu" ? "nav-menu responsive" : "nav-menu";
+       var i = document.getElementById("navMenu");
+       i.className = i.className === "nav-menu" ? "nav-menu responsive" : "nav-menu";
    }
 
    // Form toggling
-   const loginButton = document.getElementById("loginBtn");
-   const registerButton = document.getElementById("registerBtn");
-   const loginForm = document.getElementById("login");
-   const registerForm = document.getElementById("register");
+    var a = document.getElementById("loginBtn");
+    var b = document.getElementById("registerBtn");
+    var x = document.getElementById("login");
+    var y = document.getElementById("register");
 
-   function showLogin() {
-       loginForm.style.left = "4px";
-       registerForm.style.right = "-520px";
-       loginButton.className += " white-btn";
-       registerButton.className = "btn";
-       loginForm.style.opacity = 1;
-       registerForm.style.opacity = 0;
-   }
+    function showLogin() {
+        x.style.left = "4px";
+        y.style.right = "-520px";
+        a.className += " white-btn";
+        b.className = "btn";
+        x.style.opacity = 1;
+        y.style.opacity = 0;
+    }
 
-   function showRegister() {
-       loginForm.style.left = "-510px";
-       registerForm.style.right = "5px";
-       loginButton.className = "btn";
-       registerButton.className += " white-btn";
-       loginForm.style.opacity = 0;
-       registerForm.style.opacity = 1;
-   }
+    function showRegister() {
+        x.style.left = "-510px";
+        y.style.right = "5px";
+        a.className = "btn";
+        b.className += " white-btn";
+        x.style.opacity = 0;
+        y.style.opacity = 1;
+    }
 
    // Handle Registration
    async function handleRegistration() {
@@ -168,30 +168,29 @@
 
        if (firstName && lastName && email && phone && password) {
            try {
-               // Set and update person attributes asynchronously
+               // Track registration event with Infobip
                await pe.setPerson({
-                   firstName,
-                   lastName,
-                   email,
-                   phone,
+                   firstName: firstName,
+                   lastName: lastName,
+                   email: email,
+                   phone: phone,
                });
 
                await pe.updatePerson({
-                   firstName,
-                   lastName,
-               });
+                   firstName: firstName,
+                   lastName: lastName,
+               }); // person attributes from the form
 
-               // Track registration event
                await pe.track("user_registered", {
-                   email,
+                   email: email,
                    registrationDate: new Date().toISOString(),
                });
 
                alert("Registration successful!");
                showLogin();
            } catch (error) {
-               console.error("Error during registration:", error);
-               alert("An error occurred during registration. Please try again.");
+               console.error("Registration failed:", error);
+               alert("Registration failed. Please try again.");
            }
        } else {
            alert("Please fill out all fields.");
@@ -205,16 +204,16 @@
 
        if (email && password) {
            try {
-               // Track login event asynchronously
+               // Track login event with Infobip
                await pe.track("user_logged_in", {
-                   email,
+                   email: email,
                    loginDate: new Date().toISOString(),
                });
 
                alert("Login successful!");
            } catch (error) {
-               console.error("Error during login:", error);
-               alert("An error occurred during login. Please try again.");
+               console.error("Login failed:", error);
+               alert("Login failed. Please try again.");
            }
        } else {
            alert("Please enter your email and password.");
