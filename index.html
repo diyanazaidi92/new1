@@ -184,10 +184,7 @@
                });
 
 		// Add the 'registration' event tracking
-            await pe.track('registration', {
-                email,
-                loginDate: new Date().toISOString(),
-               });
+            await pe.track('registration');
 
                alert("Registration successful!");
                showLogin();
