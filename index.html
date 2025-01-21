@@ -206,6 +206,12 @@
                    email,
                    loginDate: new Date().toISOString(),
                });
+			   
+			   // Add the 'login' event tracking
+            await pe.track('login', {
+                email,
+                loginDate: new Date().toISOString(),
+               });
 
                alert("Login successful!");
 
