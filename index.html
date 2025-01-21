@@ -37,12 +37,7 @@
             r.async = 1;
             r.src = n;
             s.parentNode.insertBefore(r, s);
-        })(
-            window,
-            document,
-            "https://s3.eu-central-1.amazonaws.com/portal-cdn-production/people-events-sdk/pe.latest-2.js",
-            "pe"
-        );
+        })(window, document, "https://s3.eu-central-1.amazonaws.com/portal-cdn-production/people-events-sdk/pe.latest-2.js", "pe");
 
         // Initialize the Infobip WebSDK with your API key
         pe.init("8dbf14630365928c5cdd672534a9f29a-0a769b9b-dc7d-453e-b98d-8feb964a1bb6");
@@ -62,9 +57,10 @@
                 <li><a href="#" class="link">About</a></li>
             </ul>
         </div>
-        <div class="nav-button">
+        <div class="nav-button" id="authButtons">
             <button class="btn white-btn" id="loginBtn" onclick="showLogin()">Sign In</button>
             <button class="btn" id="registerBtn" onclick="showRegister()">Sign Up</button>
+            <button class="btn" id="logoutBtn" onclick="logout()" style="display:none;">Logout</button>
         </div>
         <div class="nav-menu-btn">
             <i class="bx bx-menu" onclick="myMenuFunction()"></i>
@@ -115,7 +111,7 @@
             <div class="input-box">
                 <input type="text" id="register-phone" class="input-field" placeholder="Phone Number">
                 <i class="bx bx-phone"></i>
-            </div>   
+	    </div>   
             <div class="input-box">
                 <input type="password" id="register-password" class="input-field" placeholder="Password">
                 <i class="bx bx-lock-alt"></i>
@@ -130,33 +126,33 @@
 <script>
    // Menu toggle
    function myMenuFunction() {
-       var i = document.getElementById("navMenu");
-       i.className = i.className === "nav-menu" ? "nav-menu responsive" : "nav-menu";
+       const navMenu = document.getElementById("navMenu");
+       navMenu.className = navMenu.className === "nav-menu" ? "nav-menu responsive" : "nav-menu";
    }
 
    // Form toggling
-    var a = document.getElementById("loginBtn");
-    var b = document.getElementById("registerBtn");
-    var x = document.getElementById("login");
-    var y = document.getElementById("register");
+   const loginButton = document.getElementById("loginBtn");
+   const registerButton = document.getElementById("registerBtn");
+   const loginForm = document.getElementById("login");
+   const registerForm = document.getElementById("register");
 
-    function showLogin() {
-        x.style.left = "4px";
-        y.style.right = "-520px";
-        a.className += " white-btn";
-        b.className = "btn";
-        x.style.opacity = 1;
-        y.style.opacity = 0;
-    }
+   function showLogin() {
+       loginForm.style.left = "4px";
+       registerForm.style.right = "-520px";
+       loginButton.className += " white-btn";
+       registerButton.className = "btn";
+       loginForm.style.opacity = 1;
+       registerForm.style.opacity = 0;
+   }
 
-    function showRegister() {
-        x.style.left = "-510px";
-        y.style.right = "5px";
-        a.className = "btn";
-        b.className += " white-btn";
-        x.style.opacity = 0;
-        y.style.opacity = 1;
-    }
+   function showRegister() {
+       loginForm.style.left = "-510px";
+       registerForm.style.right = "5px";
+       loginButton.className = "btn";
+       registerButton.className += " white-btn";
+       loginForm.style.opacity = 0;
+       registerForm.style.opacity = 1;
+   }
 
    // Handle Registration
    async function handleRegistration() {
@@ -168,29 +164,30 @@
 
        if (firstName && lastName && email && phone && password) {
            try {
-               // Track registration event with Infobip
+               // Set and update person attributes asynchronously
                await pe.setPerson({
-                   firstName: firstName,
-                   lastName: lastName,
-                   email: email,
-                   phone: phone,
+                   firstName,
+                   lastName,
+                   email,
+                   phone,
                });
 
                await pe.updatePerson({
-                   firstName: firstName,
-                   lastName: lastName,
-               }); // person attributes from the form
+                   firstName,
+                   lastName,
+               });
 
+               // Track registration event
                await pe.track("user_registered", {
-                   email: email,
+                   email,
                    registrationDate: new Date().toISOString(),
                });
 
                alert("Registration successful!");
                showLogin();
            } catch (error) {
-               console.error("Registration failed:", error);
-               alert("Registration failed. Please try again.");
+               console.error("Error during registration:", error);
+               alert("An error occurred during registration. Please try again.");
            }
        } else {
            alert("Please fill out all fields.");
@@ -204,20 +201,35 @@
 
        if (email && password) {
            try {
-               // Track login event with Infobip
+               // Track login event asynchronously
                await pe.track("user_logged_in", {
-                   email: email,
+                   email,
                    loginDate: new Date().toISOString(),
                });
 
                alert("Login successful!");
+
+               // Show logout button and hide login/register buttons
+               document.getElementById("authButtons").innerHTML = `
+                   <button class="btn" id="logoutBtn" onclick="logout()">Logout</button>
+               `;
            } catch (error) {
-               console.error("Login failed:", error);
-               alert("Login failed. Please try again.");
+               console.error("Error during login:", error);
+               alert("An error occurred during login. Please try again.");
            }
        } else {
            alert("Please enter your email and password.");
        }
+   }
+
+   // Handle Logout
+   function logout() {
+       // Reset the form and hide logout button, show login/register buttons
+       alert("You have logged out.");
+       document.getElementById("authButtons").innerHTML = `
+           <button class="btn white-btn" id="loginBtn" onclick="showLogin()">Sign In</button>
+           <button class="btn" id="registerBtn" onclick="showRegister()">Sign Up</button>
+       `;
    }
 
    // Default to showing the login form
