@@ -60,7 +60,7 @@
         <div class="nav-button" id="authButtons">
             <button class="btn white-btn" id="loginBtn" onclick="showLogin()">Sign In</button>
             <button class="btn" id="registerBtn" onclick="showRegister()">Sign Up</button>
-            <button class="btn" id="logoutBtn" onclick="logout()" style="display:none;">Logout</button>
+            <button class="btn logout-button" id="logoutBtn" onclick="onLogoutButtonClick()" style="display:none;">Logout</button>
         </div>
         <div class="nav-menu-btn">
             <i class="bx bx-menu" onclick="myMenuFunction()"></i>
@@ -75,17 +75,19 @@
                 <span>Don't have an account? <a href="#" onclick="showRegister()">Sign Up</a></span>
                 <header>Login</header>
             </div>
-            <div class="input-box">
-                <input type="text" id="login-email" class="input-field" placeholder="Username or Email">
-                <i class="bx bx-user"></i>
-            </div>
-            <div class="input-box">
-                <input type="password" id="login-password" class="input-field" placeholder="Password">
-                <i class="bx bx-lock-alt"></i>
-            </div>
-            <div class="input-box">
-                <input type="submit" class="submit" value="Sign In" onclick="handleLogin()">
-            </div>
+            <form id="loginForm">
+                <div class="input-box">
+                    <input type="text" id="login-email" name="email" class="input-field" placeholder="Username or Email">
+                    <i class="bx bx-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="login-password" name="password" class="input-field" placeholder="Password">
+                    <i class="bx bx-lock-alt"></i>
+                </div>
+                <div class="input-box">
+                    <input type="submit" class="submit" value="Sign In">
+                </div>
+            </form>
         </div>
 
         <!------------------- registration form -------------------------->
@@ -195,23 +197,22 @@
    }
 
    // Handle Login
-   async function handleLogin() {
+   const onLoginFormSubmit = async (evt) => {
+       evt.preventDefault(); // Prevent the form from submitting the traditional way
        const email = document.getElementById("login-email").value;
        const password = document.getElementById("login-password").value;
 
        if (email && password) {
            try {
-               // Track login event asynchronously
-               await pe.track("user_logged_in", {
-                   email,
-                   loginDate: new Date().toISOString(),
-               });
+               // Set person's profile and track the login event
+               await pe.setPerson({ email }); // Set the email from the login form
+               await pe.track('login'); // Track login event
 
                alert("Login successful!");
 
                // Show logout button and hide login/register buttons
                document.getElementById("authButtons").innerHTML = `
-                   <button class="btn" id="logoutBtn" onclick="logout()">Logout</button>
+                   <button class="btn logout-button" id="logoutBtn" onclick="onLogoutButtonClick()">Logout</button>
                `;
            } catch (error) {
                console.error("Error during login:", error);
@@ -220,17 +221,24 @@
        } else {
            alert("Please enter your email and password.");
        }
-   }
+   };
 
-   // Handle Logout
-   function logout() {
-       // Reset the form and hide logout button, show login/register buttons
+   // Attach the submit event to the login form
+   const loginForm = document.getElementById('loginForm');
+   loginForm.addEventListener('submit', onLoginFormSubmit);
+
+   // Logout button click handler
+   const onLogoutButtonClick = async () => {
+       await pe.track('logout'); // Track logout event
+       await pe.forgetPerson();  // Forget the person (clear session)
        alert("You have logged out.");
+
+       // Reset UI to show login/register buttons again
        document.getElementById("authButtons").innerHTML = `
            <button class="btn white-btn" id="loginBtn" onclick="showLogin()">Sign In</button>
            <button class="btn" id="registerBtn" onclick="showRegister()">Sign Up</button>
        `;
-   }
+   };
 
    // Default to showing the login form
    showLogin();
