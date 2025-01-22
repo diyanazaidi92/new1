@@ -177,15 +177,8 @@
                    lastName,
                });
 
-               // Track registration event
-               await pe.track("user_registered", {
-                   email,
-                   registrationDate: new Date().toISOString(),
-               });
-
 		// Add the 'registration' event tracking
-            await pe.track('registration');
-
+               await pe.track('registration');
                alert("Registration successful!");
                showLogin();
            } catch (error) {
@@ -203,19 +196,9 @@
        const password = document.getElementById("login-password").value;
 
        if (email && password) {
-           try {
-               // Track login event asynchronously
-               await pe.track("user_logged_in", {
-                   email,
-                   loginDate: new Date().toISOString(),
-               });
-			   
+           try {	   
 		// Add the 'login' event tracking
-            await pe.track('login', {
-                email,
-                loginDate: new Date().toISOString(),
-               });
-
+               await pe.track('login');
                alert("Login successful!");
 
                // Show logout button and hide login/register buttons
