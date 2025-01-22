@@ -195,7 +195,7 @@
        const email = document.getElementById("login-email").value;
        const password = document.getElementById("login-password").value;
 
-       if (email && password) {
+       if (email || password) {
            try {	   
 		// Add the 'login' event tracking
                await pe.track('login');
