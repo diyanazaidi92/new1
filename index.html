@@ -217,7 +217,7 @@
    // Logout button click handler
    const onLogoutButtonClick = async () => {
        await pe.track('logout'); // Track logout event
-       await pe.forgetPerson();  // Forget the person (clear session)
+       //await pe.forgetPerson();  // Forget the person (clear session)
        alert("You have logged out.");
 
        // Reset UI to show login/register buttons again
