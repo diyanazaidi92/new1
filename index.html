@@ -67,9 +67,8 @@
         </div>
     </nav>
 
-<!----------------------------- Form box ----------------------------------->    
+    <!-- Login and Registration Form -->
     <div class="form-box">
-        <!------------------- login form -------------------------->
         <div class="login-container" id="login">
             <div class="top">
                 <span>Don't have an account? <a href="#" onclick="showRegister()">Sign Up</a></span>
@@ -88,7 +87,6 @@
             </div>
         </div>
 
-        <!------------------- registration form -------------------------->
         <div class="register-container" id="register">
             <div class="top">
                 <span>Have an account? <a href="#" onclick="showLogin()">Login</a></span>
@@ -111,7 +109,7 @@
             <div class="input-box">
                 <input type="text" id="register-phone" class="input-field" placeholder="Phone Number">
                 <i class="bx bx-phone"></i>
-	    </div>   
+            </div>
             <div class="input-box">
                 <input type="password" id="register-password" class="input-field" placeholder="Password">
                 <i class="bx bx-lock-alt"></i>
@@ -121,7 +119,13 @@
             </div>
         </div>
     </div>
-</div>   
+
+    <!-- Infobip Form Embed -->
+    <div class="infobip-form-container">
+        <div id="form-ff6216ad-d834-42f9-b348-934a66e59e69"></div>
+        <script async src="https://forms.infobip.com/forms/ff6216ad-d834-42f9-b348-934a66e59e69.js"></script>
+    </div>
+</div>
 
 <script>
    // Menu toggle
@@ -164,7 +168,6 @@
 
        if (firstName && lastName && email && phone && password) {
            try {
-               // Set and update person attributes asynchronously
                await pe.setPerson({
                    firstName,
                    lastName,
@@ -177,7 +180,6 @@
                    lastName,
                });
 
-		// Add the 'registration' event tracking
                await pe.track('registration');
                alert("Registration successful!");
                showLogin();
@@ -196,12 +198,10 @@
        const password = document.getElementById("login-password").value;
 
        if (email || password) {
-           try {	   
-		// Add the 'login' event tracking
+           try {
                await pe.track('login');
                alert("Login successful!");
 
-               // Show logout button and hide login/register buttons
                document.getElementById("authButtons").innerHTML = `
                    <button class="btn logout-button" id="logoutBtn" onclick="onLogoutButtonClick()">Logout</button>
                `;
@@ -216,11 +216,10 @@
 
    // Logout button click handler
    const onLogoutButtonClick = async () => {
-       await pe.track('logout'); // Track logout event
-       await pe.forgetPerson();  // Forget the person (clear session)
+       await pe.track('logout');
+       await pe.forgetPerson();
        alert("You have logged out.");
 
-       // Reset UI to show login/register buttons again
        document.getElementById("authButtons").innerHTML = `
            <button class="btn white-btn" id="loginBtn" onclick="showLogin()">Sign In</button>
            <button class="btn" id="registerBtn" onclick="showRegister()">Sign Up</button>
@@ -233,6 +232,3 @@
 
 </body>
 </html>
-
-<div id="form-ff6216ad-d834-42f9-b348-934a66e59e69"></div>
-<script async src="https://forms.infobip.com/forms/ff6216ad-d834-42f9-b348-934a66e59e69.js"></script>
