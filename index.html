@@ -8,29 +8,14 @@
     <link rel="stylesheet" href="style.css">
     <title>Glamora | Login & Registration</title>
     <script>
-        // Load Infobip People WebSDK
         (function (e, t, n, o) {
             e.PeopleEventsObject = o;
             e[o] = e[o] || {
-                init: function (t) {
-                    e[o].apiKey = t;
-                },
-                setPerson: function (t, n) {
-                    e[o].person = t;
-                    e[o].personTtl = n;
-                },
-                forgetPerson: function () {
-                    e[o].toForgetPerson = true;
-                },
-                track: function () {
-                    (e[o].q = e[o].q || []).push(arguments);
-                },
-                updatePerson: function (t) {
-                    e[o].personToUpdate = { person: t };
-                },
-                appendToList: function (t, n) {
-                    e[o].attributeToAppend = { attributeName: t, attribute: n };
-                },
+                init: function (t) { e[o].apiKey = t; },
+                setPerson: function (t, n) { e[o].person = t; e[o].personTtl = n; },
+                forgetPerson: function () { e[o].toForgetPerson = true; },
+                track: function () { (e[o].q = e[o].q || []).push(arguments); },
+                updatePerson: function (t) { e[o].personToUpdate = { person: t }; },
             };
             var r = t.createElement("script");
             var s = t.getElementsByTagName("script")[0];
@@ -39,196 +24,101 @@
             s.parentNode.insertBefore(r, s);
         })(window, document, "https://s3.eu-central-1.amazonaws.com/portal-cdn-production/people-events-sdk/pe.latest-2.js", "pe");
 
-        // Initialize the Infobip WebSDK with your API key
         pe.init("8dbf14630365928c5cdd672534a9f29a-0a769b9b-dc7d-453e-b98d-8feb964a1bb6");
     </script>
 </head>
 <body>
- <div class="wrapper">
-    <nav class="nav">
-        <div class="nav-logo">
-            <p>GLAMORA</p>
-        </div>
-        <div class="nav-menu" id="navMenu">
-            <ul>
-                <li><a href="#" class="link active">Home</a></li>
-                <li><a href="#" class="link">Blog</a></li>
-                <li><a href="#" class="link">Services</a></li>
-                <li><a href="#" class="link">About</a></li>
-            </ul>
-        </div>
-        <div class="nav-button" id="authButtons">
-            <button class="btn white-btn" id="loginBtn" onclick="showLogin()">Sign In</button>
-            <button class="btn" id="registerBtn" onclick="showRegister()">Sign Up</button>
-            <button class="btn logout-button" id="logoutBtn" onclick="onLogoutButtonClick()" style="display:none;">Logout</button>
-        </div>
-        <div class="nav-menu-btn">
-            <i class="bx bx-menu" onclick="myMenuFunction()"></i>
-        </div>
-    </nav>
-
-    <!-- Login and Registration Form -->
-    <div class="form-box">
-        <div class="login-container" id="login">
-            <div class="top">
-                <span>Don't have an account? <a href="#" onclick="showRegister()">Sign Up</a></span>
+    <div class="wrapper">
+        <div class="form-box">
+            <div class="login-container" id="login">
                 <header>Login</header>
+                <div class="input-box">
+                    <input type="text" id="login-email" class="input-field" placeholder="Email">
+                </div>
+                <div class="input-box">
+                    <input type="password" id="login-password" class="input-field" placeholder="Password">
+                </div>
+                <div class="input-box">
+                    <input type="submit" class="submit" value="Sign In" onclick="handleLogin()">
+                </div>
             </div>
-            <div class="input-box">
-                <input type="text" id="login-email" class="input-field" placeholder="Username or Email">
-                <i class="bx bx-user"></i>
-            </div>
-            <div class="input-box">
-                <input type="password" id="login-password" class="input-field" placeholder="Password">
-                <i class="bx bx-lock-alt"></i>
-            </div>
-            <div class="input-box">
-                <input type="submit" class="submit" value="Sign In" onclick="handleLogin()">
-            </div>
-        </div>
-
-        <div class="register-container" id="register">
-            <div class="top">
-                <span>Have an account? <a href="#" onclick="showLogin()">Login</a></span>
+            <div class="register-container" id="register">
                 <header>Sign Up</header>
-            </div>
-            <div class="two-forms">
                 <div class="input-box">
                     <input type="text" id="register-firstname" class="input-field" placeholder="Firstname">
-                    <i class="bx bx-user"></i>
                 </div>
                 <div class="input-box">
-                    <input type="text" id="register-lastname" class="input-field" placeholder="Lastname">
-                    <i class="bx bx-user"></i>
+                    <input type="email" id="register-email" class="input-field" placeholder="Email">
                 </div>
-            </div>
-            <div class="input-box">
-                <input type="email" id="register-email" class="input-field" placeholder="Email">
-                <i class="bx bx-envelope"></i>
-            </div>
-            <div class="input-box">
-                <input type="text" id="register-phone" class="input-field" placeholder="Phone Number">
-                <i class="bx bx-phone"></i>
-            </div>
-            <div class="input-box">
-                <input type="password" id="register-password" class="input-field" placeholder="Password">
-                <i class="bx bx-lock-alt"></i>
-            </div>
-            <div class="input-box">
-                <input type="submit" class="submit" value="Register" onclick="handleRegistration()">
+                <div class="input-box">
+                    <input type="password" id="register-password" class="input-field" placeholder="Password">
+                </div>
+                <div class="input-box">
+                    <input type="submit" class="submit" value="Register" onclick="handleRegistration()">
+                </div>
             </div>
         </div>
     </div>
+    <script>
+        function validateEmail(email) {
+            const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return re.test(email);
+        }
 
-    <!-- Infobip Form Embed -->
-    <div class="infobip-form-container">
-        <div id="form-ff6216ad-d834-42f9-b348-934a66e59e69"></div>
-        <script async src="https://forms.infobip.com/forms/ff6216ad-d834-42f9-b348-934a66e59e69.js"></script>
-    </div>
-</div>
+        function validatePassword(password) {
+            return password.length >= 6 && /[A-Z]/.test(password) && /[0-9]/.test(password);
+        }
 
-<script>
-   // Menu toggle
-   function myMenuFunction() {
-       const navMenu = document.getElementById("navMenu");
-       navMenu.className = navMenu.className === "nav-menu" ? "nav-menu responsive" : "nav-menu";
-   }
+        async function handleRegistration() {
+            const firstName = document.getElementById("register-firstname").value;
+            const email = document.getElementById("register-email").value;
+            const password = document.getElementById("register-password").value;
 
-   // Form toggling
-   const loginButton = document.getElementById("loginBtn");
-   const registerButton = document.getElementById("registerBtn");
-   const loginForm = document.getElementById("login");
-   const registerForm = document.getElementById("register");
+            if (!firstName || !email || !password) {
+                alert("Please fill out all fields.");
+                return;
+            }
 
-   function showLogin() {
-       loginForm.style.left = "4px";
-       registerForm.style.right = "-520px";
-       loginButton.className += " white-btn";
-       registerButton.className = "btn";
-       loginForm.style.opacity = 1;
-       registerForm.style.opacity = 0;
-   }
+            if (!validateEmail(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
 
-   function showRegister() {
-       loginForm.style.left = "-510px";
-       registerForm.style.right = "5px";
-       loginButton.className = "btn";
-       registerButton.className += " white-btn";
-       loginForm.style.opacity = 0;
-       registerForm.style.opacity = 1;
-   }
+            if (!validatePassword(password)) {
+                alert("Password must be at least 6 characters long, contain an uppercase letter, and a number.");
+                return;
+            }
 
-   // Handle Registration
-   async function handleRegistration() {
-       const firstName = document.getElementById("register-firstname").value;
-       const lastName = document.getElementById("register-lastname").value;
-       const email = document.getElementById("register-email").value;
-       const phone = document.getElementById("register-phone").value;
-       const password = document.getElementById("register-password").value;
+            try {
+                await pe.setPerson({ firstName, email });
+                await pe.track('registration');
+                alert("Registration successful!");
+            } catch (error) {
+                console.error("Error during registration:", error);
+                alert("An error occurred during registration. Please try again.");
+            }
+        }
 
-       if (firstName && lastName && email && phone && password) {
-           try {
-               await pe.setPerson({
-                   firstName,
-                   lastName,
-                   email,
-                   phone,
-               });
+        async function handleLogin() {
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
 
-               await pe.updatePerson({
-                   firstName,
-                   lastName,
-               });
+            if (!email || !password) {
+                alert("Please enter both email and password.");
+                return;
+            }
 
-               await pe.track('registration');
-               alert("Registration successful!");
-               showLogin();
-           } catch (error) {
-               console.error("Error during registration:", error);
-               alert("An error occurred during registration. Please try again.");
-           }
-       } else {
-           alert("Please fill out all fields.");
-       }
-   }
+            try {
+                await pe.track('login');
+                alert("Login successful!");
+            } catch (error) {
+                console.error("Error during login:", error);
+                alert("Invalid credentials or network error.");
+            }
+        }
+    </script>
 
-   // Handle Login
-   async function handleLogin() {
-       const email = document.getElementById("login-email").value;
-       const password = document.getElementById("login-password").value;
-
-       if (email || password) {
-           try {
-               await pe.track('login');
-               alert("Login successful!");
-
-               document.getElementById("authButtons").innerHTML = `
-                   <button class="btn logout-button" id="logoutBtn" onclick="onLogoutButtonClick()">Logout</button>
-               `;
-           } catch (error) {
-               console.error("Error during login:", error);
-               alert("An error occurred during login. Please try again.");
-           }
-       } else {
-           alert("Please enter your email and password.");
-       }
-   }
-
-   // Logout button click handler
-   const onLogoutButtonClick = async () => {
-       await pe.track('logout');
-       await pe.forgetPerson();
-       alert("You have logged out.");
-
-       document.getElementById("authButtons").innerHTML = `
-           <button class="btn white-btn" id="loginBtn" onclick="showLogin()">Sign In</button>
-           <button class="btn" id="registerBtn" onclick="showRegister()">Sign Up</button>
-       `;
-   };
-
-   // Default to showing the login form
-   showLogin();
-</script>
-
+    <div id="form-ff6216ad-d834-42f9-b348-934a66e59e69"></div>
+    <script async src="https://forms.infobip.com/forms/ff6216ad-d834-42f9-b348-934a66e59e69.js"></script>
 </body>
 </html>
